@@ -1,0 +1,122 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <button (click)="goBack()" class="inline-flex items-center text-secondary-600 hover:text-secondary-500 mr-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Teachers
+          </button>
+          <h1 class="text-xl font-bold text-secondary-600">Teacher Profile</h1>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-12">
+      <svg class="animate-spin h-12 w-12 text-secondary-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <p class="mt-4 text-gray-600">Loading teacher profile...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Teacher Profile -->
+    <div *ngIf="teacher && !isLoading" class="space-y-8">
+      <!-- Teacher Info Card -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <img
+              *ngIf="teacher.image"
+              [src]="'http://localhost:3000/' + teacher.image"
+              alt="Teacher"
+              class="h-16 w-16 rounded-full object-cover"
+            />
+            <div
+              *ngIf="!teacher.image"
+              class="h-16 w-16 bg-secondary-100 rounded-full flex items-center justify-center"
+            >
+              <svg class="h-8 w-8 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-6">
+            <h2 class="text-2xl font-bold text-gray-900">{{ teacher.name }}</h2>
+            <p class="text-lg text-gray-600">{{ teacher.faculty }}</p>
+            <p class="text-sm text-gray-500">Teacher ID: {{ teacher.teacherId }}</p>
+            <div class="mt-2 flex items-center text-sm text-gray-500">
+              <span>{{ teacher.documentCount }} documents</span>
+              <span class="mx-2">•</span>
+              <span>Last updated: {{ formatDate(teacher.lastDocumentUpdate || '') }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Section -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">Available Documents ({{ teacher.documents.length }})</h3>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="teacher.documents.length === 0" class="p-6 text-center">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5 5A1 1 0 0118 9v10a2 2 0 01-2 2z"></path>
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">No documents available</h3>
+          <p class="mt-1 text-sm text-gray-500">This teacher hasn't uploaded any documents yet.</p>
+        </div>
+
+        <!-- Documents List -->
+        <div *ngIf="teacher.documents.length > 0" class="divide-y divide-gray-200">
+          <div *ngFor="let document of teacher.documents" class="p-6 hover:bg-gray-50">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center flex-1">
+                <div class="flex-shrink-0">
+                  <svg class="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4 flex-1">
+                  <h4 class="text-lg font-medium text-gray-900">{{ document.title }}</h4>
+                  <p class="text-sm text-gray-600">Subject: {{ document.subject }}</p>
+                  <p class="text-sm text-gray-500">Original: {{ document.originalName }}</p>
+                  <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <span>{{ formatFileSize(document.fileSize) }}</span>
+                    <span class="mx-2">•</span>
+                    <span>{{ formatDate(document.createdAt) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <button
+                  (click)="downloadDocument(document._id, document.originalName)"
+                  class="bg-secondary-600 text-white px-4 py-2 rounded-md hover:bg-secondary-700 transition-colors text-sm font-medium"
+                >
+                  <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5 5A1 1 0 0118 9v10a2 2 0 01-2 2z"></path>
+                  </svg>
+                  Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

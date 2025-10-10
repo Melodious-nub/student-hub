@@ -1,0 +1,83 @@
+<div class="min-h-screen bg-gradient-to-br from-secondary-50 to-primary-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <!-- Header -->
+    <div class="text-center">
+      <button (click)="goBack()" class="inline-flex items-center text-secondary-600 hover:text-secondary-500 mb-4">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Home
+      </button>
+      <h2 class="text-3xl font-bold text-gray-900">Student Login</h2>
+      <p class="mt-2 text-sm text-gray-600">Sign in to your student account</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="bg-white py-8 px-6 shadow-lg rounded-lg">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Student ID -->
+        <div>
+          <label for="studentId" class="block text-sm font-medium text-gray-700">Student ID</label>
+          <input
+            id="studentId"
+            type="text"
+            formControlName="studentId"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-secondary-500 focus:border-secondary-500"
+            placeholder="Enter your student ID"
+          />
+          <div *ngIf="loginForm.get('studentId')?.invalid && loginForm.get('studentId')?.touched" class="mt-1 text-sm text-red-600">
+            Student ID is required
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-secondary-500 focus:border-secondary-500"
+            placeholder="Enter your password"
+          />
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="mt-1 text-sm text-red-600">
+            Password is required and must be at least 6 characters
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid || isLoading"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary-600 hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isLoading">Sign In</span>
+            <span *ngIf="isLoading" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Signing In...
+            </span>
+          </button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center">
+          <p class="text-sm text-gray-600">
+            Don't have an account?
+            <button (click)="goToRegister()" class="font-medium text-secondary-600 hover:text-secondary-500">
+              Register here
+            </button>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

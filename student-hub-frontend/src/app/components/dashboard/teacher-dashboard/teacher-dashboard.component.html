@@ -1,0 +1,118 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <h1 class="text-xl font-bold text-primary-600">StudentHub - Teacher Portal</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-2">
+            <img *ngIf="currentUser?.image" [src]="'http://localhost:3000/' + currentUser.image" alt="Profile" class="w-8 h-8 rounded-full">
+            <div *ngIf="!currentUser?.image" class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <span class="text-sm font-medium text-gray-700">{{ currentUser?.name }}</span>
+          </div>
+          <button (click)="logout()" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-gray-900">Document Management</h2>
+      <p class="text-gray-600">Upload and manage your educational resources</p>
+    </div>
+
+    <!-- Upload Button -->
+    <div class="mb-6">
+      <button
+        (click)="toggleUploadForm()"
+        class="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors"
+      >
+        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        Upload New Document
+      </button>
+    </div>
+
+    <!-- Upload Form -->
+    <div *ngIf="showUploadForm" class="mb-8">
+      <app-document-upload (documentUploaded)="onDocumentUploaded()"></app-document-upload>
+    </div>
+
+    <!-- Documents List -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900">Your Documents ({{ documents.length }})</h3>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="p-6 text-center">
+        <svg class="animate-spin h-8 w-8 text-primary-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="mt-2 text-gray-600">Loading documents...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && documents.length === 0" class="p-6 text-center">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5 5A1 1 0 0118 9v10a2 2 0 01-2 2z"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No documents</h3>
+        <p class="mt-1 text-sm text-gray-500">Get started by uploading your first document.</p>
+      </div>
+
+      <!-- Documents Grid -->
+      <div *ngIf="!isLoading && documents.length > 0" class="divide-y divide-gray-200">
+        <div *ngFor="let document of documents" class="p-6 hover:bg-gray-50">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg class="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4 flex-1">
+                  <h4 class="text-lg font-medium text-gray-900">{{ document.title }}</h4>
+                  <p class="text-sm text-gray-600">Subject: {{ document.subject }}</p>
+                  <p class="text-sm text-gray-500">Original: {{ document.originalName }}</p>
+                  <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <span>{{ formatFileSize(document.fileSize) }}</span>
+                    <span class="mx-2">•</span>
+                    <span>{{ formatDate(document.createdAt) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button
+                (click)="deleteDocument(document._id)"
+                class="text-red-600 hover:text-red-800 p-2"
+                title="Delete document"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
