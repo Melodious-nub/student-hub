@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Environment variables (allow .env for development and git)
+# .env
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
