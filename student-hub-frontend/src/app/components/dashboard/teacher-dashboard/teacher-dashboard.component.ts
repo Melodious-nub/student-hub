@@ -18,6 +18,8 @@ export class TeacherDashboardComponent implements OnInit {
   documents: Document[] = [];
   isLoading = false;
   showUploadForm = false;
+  showUploadDropdown = false;
+  selectedUploadType: 'file' | 'notice' = 'file';
 
   constructor(
     private authService: AuthService,
@@ -42,6 +44,16 @@ export class TeacherDashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  toggleUploadDropdown(): void {
+    this.showUploadDropdown = !this.showUploadDropdown;
+  }
+
+  selectUploadType(type: 'file' | 'notice'): void {
+    this.selectedUploadType = type;
+    this.showUploadDropdown = false;
+    this.showUploadForm = true;
   }
 
   toggleUploadForm(): void {

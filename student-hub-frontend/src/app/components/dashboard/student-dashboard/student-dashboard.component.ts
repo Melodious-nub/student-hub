@@ -5,12 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { DocumentService } from '../../../services/document.service';
 import { Teacher } from '../../../models/user.model';
+import { RelativeTimePipe } from '../../../pipes/relative-time.pipe';
 
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RelativeTimePipe],
   standalone: true
 })
 export class StudentDashboardComponent implements OnInit {
@@ -63,8 +64,4 @@ export class StudentDashboardComponent implements OnInit {
     );
   }
 
-  formatDate(dateString: string | undefined): string {
-    if (!dateString) return 'No documents yet';
-    return new Date(dateString).toLocaleDateString();
-  }
 }

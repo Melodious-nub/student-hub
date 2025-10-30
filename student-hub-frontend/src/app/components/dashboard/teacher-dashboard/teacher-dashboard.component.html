@@ -34,17 +34,53 @@
       <p class="text-gray-600">Upload and manage your educational resources</p>
     </div>
 
-    <!-- Upload Button -->
-    <div class="mb-6">
+    <!-- Upload Dropdown Button -->
+    <div class="mb-6 relative inline-block">
       <button
-        (click)="toggleUploadForm()"
-        class="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors"
+        (click)="toggleUploadDropdown()"
+        class="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors flex items-center gap-2"
       >
-        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
         </svg>
-        Upload New Document
+        <span>{{ selectedUploadType === 'file' ? 'Upload New File' : 'Post New Notice' }}</span>
+        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
       </button>
+
+      <!-- Dropdown Menu -->
+      <div 
+        *ngIf="showUploadDropdown"
+        class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50 border border-gray-200"
+      >
+        <div class="py-1">
+          <button
+            (click)="selectUploadType('file')"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3"
+          >
+            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5 5A1 1 0 0118 9v10a2 2 0 01-2 2z"></path>
+            </svg>
+            <div>
+              <div class="font-medium">File</div>
+              <div class="text-xs text-gray-500">Upload a document or resource</div>
+            </div>
+          </button>
+          <button
+            (click)="selectUploadType('notice')"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3"
+          >
+            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+            <div>
+              <div class="font-medium">Notice</div>
+              <div class="text-xs text-gray-500">Post an announcement or notice</div>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Upload Form -->

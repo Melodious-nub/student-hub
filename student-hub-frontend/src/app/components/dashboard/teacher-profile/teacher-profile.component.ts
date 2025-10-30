@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DocumentService } from '../../../services/document.service';
 import { TeacherProfile } from '../../../models/document.model';
+import { RelativeTimePipe } from '../../../pipes/relative-time.pipe';
 
 @Component({
   selector: 'app-teacher-profile',
   templateUrl: './teacher-profile.component.html',
   styleUrls: ['./teacher-profile.component.scss'],
-  imports: [CommonModule],
+  imports: [CommonModule, RelativeTimePipe],
   standalone: true
 })
 export class TeacherProfileComponent implements OnInit {
